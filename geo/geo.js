@@ -12,7 +12,7 @@ d3.csv('geo.csv', function(error, data) {
         .call(map.draw, map);
     var ggg = d3.select('#map-svg');
     console.log(ggg)
-    var ccc = ggg.select('.units');
+    var ccc = d3.select('#unit-CHN');
     console.log(ccc)
 });
 
