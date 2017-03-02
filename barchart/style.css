@@ -1,0 +1,66 @@
+div {
+        border: 1px solid black;
+}
+
+
+.bar {
+  fill: steelblue;
+}
+
+.bar:hover {
+  fill:darkorange;
+}
+
+.axis--x path {
+  display: none;
+}
+
+.y{
+        font-size: 12px;
+}
+
+
+#layout {
+        width: 1080px;
+        height: 680;
+}
+
+#title, #controls, #infobar {
+        font-family: 'Raleway', sans-serif;
+        text-align: center;
+}
+
+#title {
+        text-align: center;
+        height: 50px;
+    border: none;
+    font-size: 20px;
+}
+
+#visualization {
+        width: 800px;
+        height:450px;
+        float: left;
+        border-top: 0;
+        text-align: center;
+    border-right: 0px;
+}
+
+#controls {
+        width: 276px;
+        height:600px;
+        float: right;
+}
+
+.tooltip {
+        position: absolute;
+        width: 200px; 
+        height: 108px; 
+        pointer-events: none;
+        background-color:teal;
+        color:white;
+}
+
+#filters{
+        text-align: left;
+}
