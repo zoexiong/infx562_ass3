@@ -144,8 +144,8 @@ function drawViz(currentDecade){
                     tooltip.transition()
                         .duration(200)
                         .style("opacity", .9);
-                    tooltip.html("Country: " + d.Country + "<br> 1990s: " + d.y2000 + ",<br> 1980s: " + d.y1990 + ",<br> 1970s: " + d.y1980 + ",<br> 1960s: " + d.y1970 + ",<br> 1950s: " + d.y1960)
-                        .style("left", (d3.event.pageX + 5) + "px")
+                    tooltip.html("Country: " + d.Country + "<br><b>" + currentDecade + ": " + d.thousand*1000 + "</b><hr>" + "1990s: " + d.y2000 + ",<br> 1980s: " + d.y1990 + ",<br> 1970s: " + d.y1980 + ",<br> 1960s: " + d.y1970 + ",<br> 1950s: " + d.y1960)
+                        .style("left", (d3.event.pageX + 15) + "px")
                         .style("top", (d3.event.pageY - 60) + "px");
                     //d3.select(this).attr("r",8);
                         })

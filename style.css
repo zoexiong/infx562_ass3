@@ -58,7 +58,7 @@ div {
 .tooltip {
         position: absolute;
         width: 200px; 
-        height: 136px; 
+        height: 170px; 
         pointer-events: none;
         background-color:teal;
         color:white;
