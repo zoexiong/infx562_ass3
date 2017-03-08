@@ -91,8 +91,11 @@ function drawViz(currentDecade){
     //clear the former viz and render a new one use different data
     g.selectAll("*").remove();
     //uncheck the sort checkbox when re-rendering
-    document.getElementById("checkbox").checked = false;
+    document.getElementById("checkboxSort").checked = false;
+    document.getElementById("checkboxTop").checked = false;
 
+    svg
+        .attr("width", 3000)
     d3.csv("country&code.csv", function(d) {
         //if (+d.y1960 >= 100000 || +d.y1970 >= 100000 || +d.y1980 >= 100000 || +d.y1990 >= 100000 || +d.y2000 >= 100000){
         d.y2000 = +d.y2000;
@@ -165,19 +168,19 @@ function drawViz(currentDecade){
         g.selectAll(".bar")
             .data(data)  
             .enter().append("rect")
-            .filter(function(d){
-                if (currentDecade == "1950s") {
-                    return d.y1960 >= 10000
-                } else if (currentDecade == "1960s") {
-                    return d.y1970 >= 20000
-                } else if (currentDecade == "1970s") {
-                    return d.y1980 >= 50000
-                } else if (currentDecade == "1980s") {
-                    return d.y1990 >= 80000
-                } else if (currentDecade == "1990s") {
-                    return d.y2000 >= 100000
-                }
-        })
+//            .filter(function(d){
+//                if (currentDecade == "1950s") {
+//                    return d.y1960 >= 10000
+//                } else if (currentDecade == "1960s") {
+//                    return d.y1970 >= 20000
+//                } else if (currentDecade == "1970s") {
+//                    return d.y1980 >= 50000
+//                } else if (currentDecade == "1980s") {
+//                    return d.y1990 >= 80000
+//                } else if (currentDecade == "1990s") {
+//                    return d.y2000 >= 100000
+//                }
+//        })
             .attr("class", "bar")
             .attr("x", function(d) { return x(d.Country)-(x.bandwidth())/1.6 -30; })
             .attr("y", function(d) { 
@@ -205,16 +208,29 @@ function drawViz(currentDecade){
                         .duration(500)
                         .style("opacity", 0);
                     });
-            d3.select("input").on("change", change);
+            d3.select("#checkboxSort").on("change", change);
+            d3.select("#checkboxTop").on("change", change);
+//        d3.select("#checkboxSort").checked("input", function() {
+//  update(+this.value);
+//});
 
-
-        function change() {
-                        svg
-          .attr("width", 990)
-           // x = d3.scaleBand().rangeRound([0, width/2.5]).padding(0.1)
             
+        function change() {
+           // x = d3.scaleBand().rangeRound([0, width/2.5]).padding(0.1)
+            //if user checked "top50", only show the top 50 countries
+            if (document.getElementById("checkboxTop").checked == false){
+                svg
+                    .attr("width", 3000);
+            } else {
+                svg
+                    .attr("width", 1116);
+            }
+        
+         
             var x0 = x.domain(data.sort(this.checked
+                                        //if it is checked, sort by number
                 ? function(a, b) { return b.thousand - a.thousand; }
+                                        //if not checked, sort by name
                 : function(a, b) { return d3.ascending(a.Country, b.Country); })
                 .map(function(d) { return d.Country; }))
                 .copy();
