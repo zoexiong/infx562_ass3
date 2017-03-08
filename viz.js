@@ -73,10 +73,9 @@ var tooltip = d3.select("body").append("div")
 var form = document.getElementById("buttonDecade");
 form.onchange = function(){
     currentDecade = form.elements["radioButton"].value;
+    var yearInt = (parseInt(currentDecade.slice(0,5))+10).toString();
+    var column = "y" + yearInt;
     drawViz(currentDecade)
-    var yearInt = (parseInt(currentDecade.slice(0,5))+10).toString()
-    var column = "y" + yearInt
-    console.log("column:" + column)
     drawMap(column)
 }
 
@@ -126,7 +125,7 @@ function drawViz(currentDecade){
 //          .key(function(d) {return d.y2000;})
 //          .sortKeys(d3.descending)
 //        .entries(d);
-//        console.log(top50y2000)s
+//        console.log(top50y2000)
 //        d.sort(function(a,b) {return b.y2000-a.y2000;});
  //       console.log(d.y2000)
        // console.log(top50)
@@ -166,7 +165,19 @@ function drawViz(currentDecade){
         g.selectAll(".bar")
             .data(data)  
             .enter().append("rect")
-        .filter(function(d){return (d.y1960 >= 100000 || d.y1970 >= 100000 || d.y1980 >= 100000 || d.y1990 >= 100000 || d.y2000 >= 100000)})
+            .filter(function(d){
+                if (currentDecade == "1950s") {
+                    return d.y1960 >= 10000
+                } else if (currentDecade == "1960s") {
+                    return d.y1970 >= 20000
+                } else if (currentDecade == "1970s") {
+                    return d.y1980 >= 50000
+                } else if (currentDecade == "1980s") {
+                    return d.y1990 >= 80000
+                } else if (currentDecade == "1990s") {
+                    return d.y2000 >= 100000
+                }
+        })
             .attr("class", "bar")
             .attr("x", function(d) { return x(d.Country)-(x.bandwidth())/1.6 -30; })
             .attr("y", function(d) { 
