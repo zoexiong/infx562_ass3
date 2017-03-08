@@ -209,6 +209,10 @@ function drawViz(currentDecade){
 
 
         function change() {
+                        svg
+          .attr("width", 990)
+           // x = d3.scaleBand().rangeRound([0, width/2.5]).padding(0.1)
+            
             var x0 = x.domain(data.sort(this.checked
                 ? function(a, b) { return b.thousand - a.thousand; }
                 : function(a, b) { return d3.ascending(a.Country, b.Country); })
