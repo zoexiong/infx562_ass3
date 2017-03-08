@@ -1,26 +1,31 @@
 //for map
-var map = d3.geomap.choropleth()
+var map;
+function drawMap(column) {
+    d3.select('#map').selectAll("*").remove();
+    map = d3.geomap.choropleth()
     .geofile('d3-geomap/topojson/world/countries.json')
     .colors(['#DFECDF','#BFD9BF','#9FC69F','#80B380','#609F60','#408C40','#207920','#006600'])
-    .column('y2000')
+    .column(column)
     .domain([0,2000000])
     .legend(true)
     .unitId('Code');
-
+    
 d3.csv('country&code.csv', function(error, data) {
     d3.select('#map')
         .datum(data)
         .call(map.draw, map);
-    var ggg = d3.select('#map-svg');
-    console.log(ggg)
-    var ccc = d3.selectAll('g.units');
-    console.log(ccc)
 });
 
                 // var ggg = d3.selectAll(self.svg);
                 // console.log(ggg.nodeName)
                 // //var ccc = ggg.selectAll("path");
                 // //console.log(ccc)
+}
+
+
+    
+
+
 
 
 // for bar chart
@@ -69,12 +74,19 @@ var form = document.getElementById("buttonDecade");
 form.onchange = function(){
     currentDecade = form.elements["radioButton"].value;
     drawViz(currentDecade)
+    var yearInt = (parseInt(currentDecade.slice(0,5))+10).toString()
+    var column = "y" + yearInt
+    console.log("column:" + column)
+    drawMap(column)
 }
 
 //initial view is set to 1990s
 form.elements["radioButton"].value="1990s";
 //render viz when first loaded
 drawViz("1990s")
+drawMap("y2000")
+
+var top50 = {}
 
 function drawViz(currentDecade){
     //clear the former viz and render a new one use different data
@@ -83,7 +95,13 @@ function drawViz(currentDecade){
     document.getElementById("checkbox").checked = false;
 
     d3.csv("country&code.csv", function(d) {
-        if (currentDecade == "1950s") {
+        //if (+d.y1960 >= 100000 || +d.y1970 >= 100000 || +d.y1980 >= 100000 || +d.y1990 >= 100000 || +d.y2000 >= 100000){
+        d.y2000 = +d.y2000;
+        d.y1990 = +d.y1990;
+        d.y1980 = +d.y1980;
+        d.y1970 = +d.y1970;
+        d.y1960 = +d.y1960;
+             if (currentDecade == "1950s") {
             d.thousand = (+d.y1960)/1000
         } else if (currentDecade == "1960s") {
             d.thousand = (+d.y1970)/1000
@@ -94,15 +112,28 @@ function drawViz(currentDecade){
         } else if (currentDecade == "1990s") {
             d.thousand = (+d.y2000)/1000
         }
-        d.y2000 = +d.y2000;
-        d.y1990 = +d.y1990;
-        d.y1980 = +d.y1980;
-        d.y1970 = +d.y1970;
-        d.y1960 = +d.y1960;
+
+        //}
+           
+       
+        
+        //filter top 50
+        
+        //quantile2000 = d3.quantile(d.y2000,0.25);
+      //data.filter(function(d) { return d.y2000 > 1000000 })
+        //console.log(quantile2000)
+//        var top50y2000=d3.nest()
+//          .key(function(d) {return d.y2000;})
+//          .sortKeys(d3.descending)
+//        .entries(d);
+//        console.log(top50y2000)s
+//        d.sort(function(a,b) {return b.y2000-a.y2000;});
+ //       console.log(d.y2000)
+       // console.log(top50)
         return d;
         },function(error, data) {
         if (error) throw error;
-
+        
         x.domain(data.map(function(d) { return d.Country; }));
 
         if (currentDecade == "1950s" || currentDecade == "1960s"){
@@ -133,13 +164,22 @@ function drawViz(currentDecade){
             .attr("text-anchor", "end");
 
         g.selectAll(".bar")
-            .data(data)
+            .data(data)  
             .enter().append("rect")
+        .filter(function(d){return (d.y1960 >= 100000 || d.y1970 >= 100000 || d.y1980 >= 100000 || d.y1990 >= 100000 || d.y2000 >= 100000)})
             .attr("class", "bar")
             .attr("x", function(d) { return x(d.Country)-(x.bandwidth())/1.6 -30; })
-            .attr("y", function(d) { return y(d.thousand); })
+            .attr("y", function(d) { 
+                if (isNaN(d.thousand)) {
+                    return 0
+                } else {return y(d.thousand); }
+        })
             .attr("width", x.bandwidth())
-            .attr("height", function(d) { return height - y(d.thousand); })
+            .attr("height", function(d) { 
+            if (isNaN(d.thousand)) {
+                    return 0
+                } else {return height - y(d.thousand); }
+        })
             .on("mouseover", function(d) { 
                     tooltip.transition()
                         .duration(200)
