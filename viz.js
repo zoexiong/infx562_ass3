@@ -210,23 +210,18 @@ function drawViz(currentDecade){
                     });
             d3.select("#checkboxSort").on("change", change);
             d3.select("#checkboxTop").on("change", change);
-//        d3.select("#checkboxSort").checked("input", function() {
-//  update(+this.value);
-//});
-
             
         function change() {
-           // x = d3.scaleBand().rangeRound([0, width/2.5]).padding(0.1)
             //if user checked "top50", only show the top 50 countries
             if (document.getElementById("checkboxTop").checked == false){
                 svg
                     .attr("width", 3000);
             } else {
+                //document.getElementById("checkboxSort").checked = false
                 svg
                     .attr("width", 1116);
             }
-        
-         
+                   
             var x0 = x.domain(data.sort(this.checked
                                         //if it is checked, sort by number
                 ? function(a, b) { return b.thousand - a.thousand; }

@@ -10,6 +10,10 @@ div {
   fill: teal;
 }
 
+b {
+    color:teal;
+}
+
 .bar:hover {
   fill:darkorange;
 }
